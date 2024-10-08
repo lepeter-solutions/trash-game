@@ -13,6 +13,8 @@ public class PlayerRaycast : MonoBehaviour
     private Transform selection;
     public RaycastHit raycastHit;
 
+    public static GameObject SelectedBin = null;
+
     private RaycastHit previousRaycastHit;
 
     void Update()
@@ -40,11 +42,11 @@ public class PlayerRaycast : MonoBehaviour
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         if (Physics.Raycast(ray, out raycastHit, raycastDistance))
         {
-            
+
             Debug.Log("Raycast hit object: " + raycastHit.transform.name);
             Transform hitTransform = raycastHit.transform;
 
-            if (!(previousRaycastHit.transform == hitTransform) )
+            if (!(previousRaycastHit.transform == hitTransform))
             {
                 Debug.Log("Raycast different object: " + hitTransform.name);
                 DifferentObjectHit(hitTransform);
@@ -56,10 +58,19 @@ public class PlayerRaycast : MonoBehaviour
             {
                 Debug.Log("Highlighting object: " + hitTransform.name);
                 highlightedObj = hitTransform;
+                if (hitTransform.CompareTag("Bin"))
+                {
+                    SelectedBin = hitTransform.gameObject;
+                }
                 HighlightObject(highlightedObj);
             }
+            else
+            {
+                SelectedBin = null;
+            }
         }
-        else{
+        else
+        {
             DifferentObjectHit(null);
         }
     }
@@ -88,7 +99,11 @@ public class PlayerRaycast : MonoBehaviour
         {
             // bin script
             TrashCanController.LidController(obj.gameObject);
-        
+            SelectedBin = obj.gameObject;
+        }
+        else
+        {
+            Debug.Log("Object is not trash or bin");
         }
     }
 

@@ -12,6 +12,7 @@ public class PickupScript : MonoBehaviour
 
     private static bool justPickedUp = false;
 
+
     void Start()
     {
 
@@ -22,23 +23,39 @@ public class PickupScript : MonoBehaviour
     {
         if (currentItem != null)
         {
-            Debug.Log("Currently holding an item: " + currentItem.name);
-            currentItem.transform.position = itemPivot.transform.position;
-            currentItem.transform.rotation = itemPivot.transform.rotation;
-            Debug.Log("JustPickUp: " + justPickedUp);
+            goToHand();
+
+            if (PlayerRaycast.SelectedBin == null)
+            {
+                checkUserEventsWhileHolding();
+            }
             
-            if (Input.GetKeyDown(KeyCode.E) && !justPickedUp)
-            {
-                Debug.Log("Dropping item after pressing E");
-                currentItem.AddComponent<Rigidbody>();
-                currentItem = null;
-            }
-            else if (Input.GetMouseButtonDown(0))
-            {
-                ThrowCurrentItem();
-            }
             justPickedUp = false;
+
         }
+    }
+
+    void checkUserEventsWhileHolding()
+    {
+        if (Input.GetKeyDown(KeyCode.E) && !justPickedUp)
+        {
+            Debug.Log("Dropping item after pressing E");
+            currentItem.AddComponent<Rigidbody>();
+            currentItem = null;
+        }
+        else if (Input.GetMouseButtonDown(0))
+        {
+            ThrowCurrentItem();
+        }
+    }
+
+
+
+    void goToHand()
+    {
+        Debug.Log("Currently holding an item: " + currentItem.name);
+        currentItem.transform.position = itemPivot.transform.position;
+        currentItem.transform.rotation = itemPivot.transform.rotation;
     }
 
     public static void ThrowCurrentItem()
@@ -76,7 +93,7 @@ public class PickupScript : MonoBehaviour
             currentItem = null;
         }
     }
-    
+
     public static void ItemPickup(GameObject pickedUpItem)
     {
         Debug.Log("Item picked up");
