@@ -16,6 +16,7 @@ public class BinlidAnimationController : MonoBehaviour
     {
         if (state)
         {
+            Debug.Log("Open Trigger");
             binlidAnimator.speed = 2f;
             binlidAnimator.Play("TrashbinLidOpen", 0, 0);
             isLidOpen = true;
