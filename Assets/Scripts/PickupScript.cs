@@ -29,10 +29,18 @@ public class PickupScript : MonoBehaviour
             {
                 checkUserEventsWhileHolding();
             }
+            else 
+            {
+                binInteract();
+            }
             
             justPickedUp = false;
 
         }
+    }
+    void binInteract()
+    {
+        BinHandler.binHandler(PlayerRaycast.SelectedBin, currentItem);
     }
 
     void checkUserEventsWhileHolding()
